@@ -205,7 +205,6 @@
                 <thead>
                     <tr>
                         <th>S.No.</th>
-                        <th>కమ సంఖ</th>
                         <th>Number of Pieces</th>
                         <th>Length (Cm.)</th>
                         <th>Width (Cm.)</th>
@@ -219,7 +218,7 @@
                 </tbody>
                 <tfoot id="tableFooter">
                     <tr>
-                        <td colspan="2">Total Volume</td>
+                        <td>Total Volume</td>
                         <td id="totalPieces">0</td>
                         <td id="totalLength">0.00</td>
                         <td id="totalWidth">0.00</td>
@@ -336,7 +335,6 @@
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
                     <td>${serialNumber}</td>
-                    <td>${teluguNumber(serialNumber)}</td>
                     <td>${numPieces}</td>
                     <td>${lengthCm} Cm.</td>
                     <td>${widthCm} Cm.</td>
@@ -365,14 +363,6 @@
                 
                 // Set focus to the first input (now length)
                 lengthInput.focus();
-            }
-            
-            // Function to convert digits to Telugu
-            function teluguNumber(number) {
-                const teluguDigits = ['౦', '౧', '౨', '౩', '౪', '౫', '౬', '౭', '౮', '౯'];
-                return number.toString().split('').map(digit => 
-                    isNaN(parseInt(digit)) ? digit : teluguDigits[parseInt(digit)]
-                ).join('');
             }
             
             // Function to clear input fields
@@ -412,7 +402,7 @@
             // Function to copy table content
             function copyTable() {
                 // Build a string that contains the table data in tab-separated format
-                let tableContent = 'S.No.\tకమ సంఖ\tNumber of Pieces\tLength (Cm.)\tWidth (Cm.)\tThickness (Cm.)\tVolume (Cum.)\tVolume (CuFt.)\n';
+                let tableContent = 'S.No.\tNumber of Pieces\tLength (Cm.)\tWidth (Cm.)\tThickness (Cm.)\tVolume (Cum.)\tVolume (CuFt.)\n';
                 
                 // Add rows from table body
                 const rows = tableBody.querySelectorAll('tr');
@@ -423,7 +413,7 @@
                 });
                 
                 // Add footer row
-                tableContent += `Total Volume\t\t${totalPiecesCell.textContent}\t${totalLengthCell.textContent}\t${totalWidthCell.textContent}\t${totalThicknessCell.textContent}\t${totalVolumeCell.textContent}\t${totalVolumeCuFtCell.textContent}`;
+                tableContent += `Total Volume\t${totalPiecesCell.textContent}\t${totalLengthCell.textContent}\t${totalWidthCell.textContent}\t${totalThicknessCell.textContent}\t${totalVolumeCell.textContent}\t${totalVolumeCuFtCell.textContent}`;
                 
                 // Copy to clipboard
                 navigator.clipboard.writeText(tableContent)
@@ -443,7 +433,7 @@
                 }
                 
                 // Create Excel CSV content
-                let csvContent = 'S.No.,కమ సంఖ,Number of Pieces,Length (Cm.),Width (Cm.),Thickness (Cm.),Volume (Cum.),Volume (CuFt.)\n';
+                let csvContent = 'S.No.,Number of Pieces,Length (Cm.),Width (Cm.),Thickness (Cm.),Volume (Cum.),Volume (CuFt.)\n';
                 
                 // Add table rows
                 const rows = tableBody.querySelectorAll('tr');
@@ -457,7 +447,7 @@
                 });
                 
                 // Add footer row
-                csvContent += `"Total Volume","","${totalPiecesCell.textContent}","${totalLengthCell.textContent}","${totalWidthCell.textContent}","${totalThicknessCell.textContent}","${totalVolumeCell.textContent}","${totalVolumeCuFtCell.textContent}"`;
+                csvContent += `"Total Volume","${totalPiecesCell.textContent}","${totalLengthCell.textContent}","${totalWidthCell.textContent}","${totalThicknessCell.textContent}","${totalVolumeCell.textContent}","${totalVolumeCuFtCell.textContent}"`;
                 
                 // Create a Blob with the CSV content
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
