@@ -3,282 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teak Wood Calculator</title>
+    <title>Teak Wood Volume Calculator</title>
     <style>
+        :root {
+            --primary-color: #38761d;
+            --secondary-color: #f9f9f9;
+            --accent-color: #6aa84f;
+            --border-color: #ddd;
+            --text-color: #333;
+            --button-hover: #2c5a17;
+            --table-alt-row: #f2f8ef;
+            --table-footer: #e8f3e2;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f9;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
         }
-        h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-        }
-        .input-section {
-            background-color: #ffffff;
-            padding: 20px;
+            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .input-section {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
         .input-group {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
         }
+        
+        .input-field {
+            flex: 1;
+            min-width: 200px;
+        }
+        
         label {
-            font-size: 14px;
-            color: #34495e;
+            display: block;
             margin-bottom: 5px;
+            font-weight: 600;
         }
+        
         input {
+            width: 100%;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #dcdcdc;
+            border: 1px solid var(--border-color);
             border-radius: 5px;
-            width: 120px;
-            transition: border-color 0.3s;
-        }
-        input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        button {
-            padding: 10px 20px;
             font-size: 16px;
-            background-color: #3498db;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary-color);
             color: white;
             border: none;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
             transition: background-color 0.3s;
         }
+        
         button:hover {
-            background-color: #2980b9;
+            background-color: var(--button-hover);
         }
-        .clear-btn {
-            background-color: #e74c3c;
-            margin-left: 10px;
+        
+        .table-container {
+            overflow-x: auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 30px;
         }
-        .clear-btn:hover {
-            background-color: #c0392b;
-        }
-        .copy-btn {
-            background-color: #2ecc71;
-            margin-left: 10px;
-        }
-        .copy-btn:hover {
-            background-color: #27ae60;
-        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #ffffff;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        
         th, td {
-            padding: 12px;
+            padding: 12px 15px;
             text-align: center;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--border-color);
         }
+        
         th {
-            background-color: #3498db;
+            background-color: var(--primary-color);
             color: white;
             font-weight: 600;
         }
+        
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: var(--table-alt-row);
         }
+        
         tr:hover {
-            background-color: #ecf0f1;
+            background-color: rgba(106, 168, 79, 0.1);
         }
-        tfoot td {
+        
+        tfoot {
             font-weight: bold;
-            background-color: #34495e;
-            color: white;
+            background-color: var(--table-footer);
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 768px) {
+            .input-field {
+                min-width: 100%;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Teak Wood Calculator</h2>
+        <h1>Teak Wood Volume Calculator</h1>
+        
         <div class="input-section">
             <div class="input-group">
-                <label>Number of Pieces</label>
-                <input type="number" id="numPieces" min="1" value="" required>
+                <div class="input-field">
+                    <label for="length">Length (feet)</label>
+                    <input type="number" id="length" step="0.01" placeholder="Enter length" required>
+                </div>
+                <div class="input-field">
+                    <label for="width">Width (inches)</label>
+                    <input type="number" id="width" step="0.01" placeholder="Enter width" required>
+                </div>
+                <div class="input-field">
+                    <label for="thickness">Thickness (inches)</label>
+                    <input type="number" id="thickness" step="0.01" placeholder="Enter thickness" required>
+                </div>
+                <div class="input-field">
+                    <label for="numPieces">Number of Pieces</label>
+                    <input type="number" id="numPieces" min="1" placeholder="Enter number" required>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Length (feet)</label>
-                <input type="number" id="lengthFt" step="0.01" min="0" value="" required>
-            </div>
-            <div class="input-group">
-                <label>Width (inches)</label>
-                <input type="number" id="widthIn" step="0.01" min="0" value="" required>
-            </div>
-            <div class="input-group">
-                <label>Thickness (inches)</label>
-                <input type="number" id="thicknessIn" step="0.01" min="0" value="" required>
-            </div>
-            <div>
-                <button onclick="addEntry()">Add Entry</button>
-                <button class="clear-btn" onclick="clearTable()">Clear Table</button>
-                <button class="copy-btn" onclick="copyTable()">Copy Table</button>
+            
+            <div class="buttons">
+                <button id="addEntry">Add Entry</button>
+                <button id="clearTable">Clear Table</button>
+                <button id="copyTable">Copy Table</button>
+                <button id="downloadExcel">Download Excel</button>
             </div>
         </div>
-
-        <table id="resultTable">
-            <thead>
-                <tr>
-                    <th>S.No.</th>
-                    <th>కమ సంఖ</th>
-                    <th>Number of Pieces</th>
-                    <th>Length</th>
-                    <th>Width</th>
-                    <th>Thickness</th>
-                    <th>Volume</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-            <tfoot id="tableFooter"></tfoot>
-        </table>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="table-container">
+            <table id="woodTable">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>కమ సంఖ</th>
+                        <th>Number of Pieces</th>
+                        <th>Length (Cm.)</th>
+                        <th>Width (Cm.)</th>
+                        <th>Thickness (Cm.)</th>
+                        <th>Volume (Cum.)</th>
+                        <th>Volume (CuFt.)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be added here dynamically -->
+                </tbody>
+                <tfoot id="tableFooter">
+                    <tr>
+                        <td colspan="2">Total Volume</td>
+                        <td id="totalPieces">0</td>
+                        <td id="totalLength">0.00</td>
+                        <td id="totalWidth">0.00</td>
+                        <td id="totalThickness">0.00</td>
+                        <td id="totalVolume">0.000</td>
+                        <td id="totalVolumeCuFt">0.000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
-
+    
     <script>
-        let entries = [];
-        let serialNo = 1;
-
-        // Handle Enter key to shift focus
-        document.querySelectorAll("input").forEach((input, index, inputs) => {
-            input.addEventListener("keypress", (event) => {
-                if (event.key === "Enter") {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const numPiecesInput = document.getElementById('numPieces');
+            const lengthInput = document.getElementById('length');
+            const widthInput = document.getElementById('width');
+            const thicknessInput = document.getElementById('thickness');
+            const addEntryBtn = document.getElementById('addEntry');
+            const clearTableBtn = document.getElementById('clearTable');
+            const copyTableBtn = document.getElementById('copyTable');
+            const downloadExcelBtn = document.getElementById('downloadExcel');
+            const tableBody = document.getElementById('tableBody');
+            const totalPiecesCell = document.getElementById('totalPieces');
+            const totalLengthCell = document.getElementById('totalLength');
+            const totalWidthCell = document.getElementById('totalWidth');
+            const totalThicknessCell = document.getElementById('totalThickness');
+            const totalVolumeCell = document.getElementById('totalVolume');
+            const totalVolumeCuFtCell = document.getElementById('totalVolumeCuFt');
+            const statusDiv = document.getElementById('status');
+            
+            // Conversion constants
+            const FEET_TO_CM = 30.48;
+            const INCH_TO_CM = 2.54;
+            const CUM_TO_CUFT = 35.3147; // 1 cubic meter = 35.3147 cubic feet
+            
+            let serialNumber = 1;
+            let totals = {
+                pieces: 0,
+                length: 0,
+                width: 0,
+                thickness: 0,
+                volume: 0,
+                volumeCuFt: 0
+            };
+            
+            // Function to handle "Enter" key press for navigation between inputs
+            function handleEnterKey(event, nextInputId) {
+                if (event.key === 'Enter') {
                     event.preventDefault();
-                    if (index < inputs.length - 1) {
-                        inputs[index + 1].focus();
+                    if (nextInputId) {
+                        document.getElementById(nextInputId).focus();
                     } else {
                         addEntry();
-                        inputs[0].focus(); // Return to first input after adding
                     }
                 }
-            });
-        });
-
-        function addEntry() {
-            const numPieces = parseInt(document.getElementById("numPieces").value);
-            const lengthFt = parseFloat(document.getElementById("lengthFt").value);
-            const widthIn = parseFloat(document.getElementById("widthIn").value);
-            const thicknessIn = parseFloat(document.getElementById("thicknessIn").value);
-
-            if (!numPieces || !lengthFt || !widthIn || !thicknessIn) {
-                alert("Please fill in all fields with valid numbers.");
-                return;
             }
-
-            // Conversions
-            const lengthCm = (lengthFt * 30.48).toFixed(2); // feet to cm
-            const widthCm = (widthIn * 2.54).toFixed(2);    // inches to cm
-            const thicknessCm = (thicknessIn * 2.54).toFixed(2); // inches to cm
-
-            // Volume in cubic meters (Cum)
-            const volumeCum = ((lengthCm * widthCm * thicknessCm * numPieces) / 1000000).toFixed(3);
-
-            const entry = {
-                sNo: serialNo++,
-                numPieces: numPieces,
-                lengthCm: lengthCm,
-                widthCm: widthCm,
-                thicknessCm: thicknessCm,
-                volumeCum: volumeCum
-            };
-
-            entries.push(entry);
-            updateTable();
-
-            // Clear input fields
-            document.getElementById("numPieces").value = "";
-            document.getElementById("lengthFt").value = "";
-            document.getElementById("widthIn").value = "";
-            document.getElementById("thicknessIn").value = "";
-        }
-
-        function updateTable() {
-            const tableBody = document.getElementById("tableBody");
-            tableBody.innerHTML = "";
-
-            entries.forEach(entry => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${entry.sNo}</td>
-                    <td>${entry.sNo}</td>
-                    <td>${entry.numPieces}</td>
-                    <td>${entry.lengthCm} Cm.</td>
-                    <td>${entry.widthCm} Cm.</td>
-                    <td>${entry.thicknessCm} Cm.</td>
-                    <td>${entry.volumeCum} Cum.</td>
+            
+            // Add event listeners for Enter key navigation (reordered to match new input order)
+            lengthInput.addEventListener('keydown', (e) => handleEnterKey(e, 'width'));
+            widthInput.addEventListener('keydown', (e) => handleEnterKey(e, 'thickness'));
+            thicknessInput.addEventListener('keydown', (e) => handleEnterKey(e, 'numPieces'));
+            numPiecesInput.addEventListener('keydown', (e) => handleEnterKey(e, null));
+            
+            // Function to validate inputs
+            function validateInputs() {
+                const numPieces = parseFloat(numPiecesInput.value);
+                const length = parseFloat(lengthInput.value);
+                const width = parseFloat(widthInput.value);
+                const thickness = parseFloat(thicknessInput.value);
+                
+                if (isNaN(numPieces) || isNaN(length) || isNaN(width) || isNaN(thickness)) {
+                    showStatus('Please fill all fields with valid numbers.', 'error');
+                    return false;
+                }
+                
+                if (numPieces < 1) {
+                    showStatus('Number of pieces must be at least 1.', 'error');
+                    return false;
+                }
+                
+                if (length <= 0 || width <= 0 || thickness <= 0) {
+                    showStatus('Dimensions must be greater than zero.', 'error');
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            // Function to add a new entry to the table
+            function addEntry() {
+                if (!validateInputs()) return;
+                
+                // Get and convert values
+                const numPieces = parseInt(numPiecesInput.value);
+                const lengthFt = parseFloat(lengthInput.value);
+                const widthIn = parseFloat(widthInput.value);
+                const thicknessIn = parseFloat(thicknessInput.value);
+                
+                // Convert to metric
+                const lengthCm = (lengthFt * FEET_TO_CM).toFixed(2);
+                const widthCm = (widthIn * INCH_TO_CM).toFixed(2);
+                const thicknessCm = (thicknessIn * INCH_TO_CM).toFixed(2);
+                
+                // Calculate volume in cubic meters
+                const volumeCm3 = numPieces * parseFloat(lengthCm) * parseFloat(widthCm) * parseFloat(thicknessCm);
+                const volumeCum = (volumeCm3 / 1000000).toFixed(3);
+                
+                // Calculate volume in cubic feet
+                const volumeCuFt = (parseFloat(volumeCum) * CUM_TO_CUFT).toFixed(3);
+                
+                // Create table row
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${serialNumber}</td>
+                    <td>${teluguNumber(serialNumber)}</td>
+                    <td>${numPieces}</td>
+                    <td>${lengthCm} Cm.</td>
+                    <td>${widthCm} Cm.</td>
+                    <td>${thicknessCm} Cm.</td>
+                    <td>${volumeCum} Cum.</td>
+                    <td>${volumeCuFt} CuFt.</td>
                 `;
-                tableBody.appendChild(row);
-            });
-
-            // Calculate totals
-            const totalPieces = entries.reduce((sum, entry) => sum + entry.numPieces, 0);
-            const totalLength = entries.reduce((sum, entry) => sum + (entry.lengthCm * entry.numPieces), 0).toFixed(1);
-            const totalWidth = entries.reduce((sum, entry) => sum + (entry.widthCm * entry.numPieces), 0).toFixed(1);
-            const totalThickness = entries.reduce((sum, entry) => sum + (entry.thicknessCm * entry.numPieces), 0).toFixed(2);
-            const totalVolume = entries.reduce((sum, entry) => sum + parseFloat(entry.volumeCum), 0).toFixed(2);
-
-            const tableFooter = document.getElementById("tableFooter");
-            tableFooter.innerHTML = `
-                <tr>
-                    <td colspan="2">Total Volume in Cum.</td>
-                    <td>${totalPieces}</td>
-                    <td>${totalLength}</td>
-                    <td>${totalWidth}</td>
-                    <td>${totalThickness}</td>
-                    <td>${totalVolume}</td>
-                </tr>
-            `;
-        }
-
-        function clearTable() {
-            entries = [];
-            serialNo = 1;
-            updateTable();
-        }
-
-        function copyTable() {
-            const table = document.getElementById("resultTable");
-            let text = "S.No.\tకమ సంఖ\tNumber of Pieces\tLength\tWidth\tThickness\tVolume\n";
-
-            entries.forEach(entry => {
-                text += `${entry.sNo}\t${entry.sNo}\t${entry.numPieces}\t${entry.lengthCm} Cm.\t${entry.widthCm} Cm.\t${entry.thicknessCm} Cm.\t${entry.volumeCum} Cum.\n`;
-            });
-
-            const totalPieces = entries.reduce((sum, entry) => sum + entry.numPieces, 0);
-            const totalLength = entries.reduce((sum, entry) => sum + (entry.lengthCm * entry.numPieces), 0).toFixed(1);
-            const totalWidth = entries.reduce((sum, entry) => sum + (entry.widthCm * entry.numPieces), 0).toFixed(1);
-            const totalThickness = entries.reduce((sum, entry) => sum + (entry.thicknessCm * entry.numPieces), 0).toFixed(2);
-            const totalVolume = entries.reduce((sum, entry) => sum + parseFloat(entry.volumeCum), 0).toFixed(2);
-
-            text += `Total Volume in Cum.\t\t${totalPieces}\t${totalLength}\t${totalWidth}\t${totalThickness}\t${totalVolume}`;
-
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Table copied to clipboard!");
-            }).catch(err => {
-                console.error("Failed to copy: ", err);
-                alert("Failed to copy table.");
-            });
-        }
+                tableBody.appendChild(newRow);
+                
+                // Update totals
+                totals.pieces += numPieces;
+                totals.length += numPieces * parseFloat(lengthCm);
+                totals.width += numPieces * parseFloat(widthCm);
+                totals.thickness += numPieces * parseFloat(thicknessCm);
+                totals.volume += parseFloat(volumeCum);
+                totals.volumeCuFt += parseFloat(volumeCuFt);
+                
+                // Update footer
+                updateTotals();
+                
+                // Increment serial number
+                serialNumber++;
+                
+                // Clear inputs
+                clearInputs();
+                
+                // Set focus to the first input (now length)
+                lengthInput.focus();
+            }
+            
+            // Function to convert digits to Telugu
+            function teluguNumber(number) {
+                const teluguDigits = ['౦', '౧', '౨', '౩', '౪', '౫', '౬', '౭', '౮', '౯'];
+                return number.toString().split('').map(digit => 
+                    isNaN(parseInt(digit)) ? digit : teluguDigits[parseInt(digit)]
+                ).join('');
+            }
+            
+            // Function to clear input fields
+            function clearInputs() {
+                numPiecesInput.value = '';
+                lengthInput.value = '';
+                widthInput.value = '';
+                thicknessInput.value = '';
+            }
+            
+            // Function to update totals in the footer
+            function updateTotals() {
+                totalPiecesCell.textContent = totals.pieces;
+                totalLengthCell.textContent = totals.length.toFixed(1);
+                totalWidthCell.textContent = totals.width.toFixed(1);
+                totalThicknessCell.textContent = totals.thickness.toFixed(2);
+                totalVolumeCell.textContent = totals.volume.toFixed(3);
+                totalVolumeCuFtCell.textContent = totals.volumeCuFt.toFixed(3);
+            }
+            
+            // Function to clear the table
+            function clearTable() {
+                tableBody.innerHTML = '';
+                serialNumber = 1;
+                totals = {
+                    pieces: 0,
+                    length: 0,
+                    width: 0,
+                    thickness: 0,
+                    volume: 0,
+                    volumeCuFt: 0
+                };
+                updateTotals();
+                showStatus('Table cleared successfully.', 'success');
+            }
+            
+            // Function to copy table content
+            function copyTable() {
+                // Build a string that contains the table data in tab-separated format
+                let tableContent = 'S.No.\tకమ సంఖ\tNumber of Pieces\tLength (Cm.)\tWidth (Cm.)\tThickness (Cm.)\tVolume (Cum.)\tVolume (CuFt.)\n';
+                
+                // Add rows from table body
+                const rows = tableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const rowData = Array.from(cells).map(cell => cell.textContent);
+                    tableContent += rowData.join('\t') + '\n';
+                });
+                
+                // Add footer row
+                tableContent += `Total Volume\t\t${totalPiecesCell.textContent}\t${totalLengthCell.textContent}\t${totalWidthCell.textContent}\t${totalThicknessCell.textContent}\t${totalVolumeCell.textContent}\t${totalVolumeCuFtCell.textContent}`;
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(tableContent)
+                    .then(() => {
+                        showStatus('Table content copied to clipboard!', 'success');
+                    })
+                    .catch(err => {
+                        showStatus('Failed to copy table. ' + err, 'error');
+                    });
+            }
+            
+            // Function to download table as Excel file
+            function downloadExcel() {
+                if (tableBody.querySelectorAll('tr').length === 0) {
+                    showStatus('No data to download. Please add entries first.', 'error');
+                    return;
+                }
+                
+                // Create Excel CSV content
+                let csvContent = 'S.No.,కమ సంఖ,Number of Pieces,Length (Cm.),Width (Cm.),Thickness (Cm.),Volume (Cum.),Volume (CuFt.)\n';
+                
+                // Add table rows
+                const rows = tableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const rowData = Array.from(cells).map(cell => {
+                        // Wrap content in quotes to handle commas in data
+                        return '"' + cell.textContent.replace(/"/g, '""') + '"';
+                    });
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // Add footer row
+                csvContent += `"Total Volume","","${totalPiecesCell.textContent}","${totalLengthCell.textContent}","${totalWidthCell.textContent}","${totalThicknessCell.textContent}","${totalVolumeCell.textContent}","${totalVolumeCuFtCell.textContent}"`;
+                
+                // Create a Blob with the CSV content
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                
+                // Create download link
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'TeakWoodCalculation.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                
+                // Clean up
+                document.body.removeChild(link);
+                showStatus('Excel file downloaded successfully!', 'success');
+            }
+            
+            // Function to show status message
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'status ' + type;
+                statusDiv.style.display = 'block';
+                
+                // Hide status after 3 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Add event listeners for buttons
+            addEntryBtn.addEventListener('click', addEntry);
+            clearTableBtn.addEventListener('click', clearTable);
+            copyTableBtn.addEventListener('click', copyTable);
+            downloadExcelBtn.addEventListener('click', downloadExcel);
+        });
     </script>
 </body>
 </html>
